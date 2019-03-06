@@ -8,6 +8,8 @@ function getDescription() {}
 function getWindSpeed() {}
 function getSunrise() {}
 
+
+// Please ignore the following
 try {
     module.exports = {
         getLocationName,
