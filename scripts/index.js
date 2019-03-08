@@ -28,49 +28,69 @@ try {
     
 }
 
-function getLocationName(weather) {
-    return weather.name;
-}
-
-const weatherDiv = document.createElement('div');
-// weatherDiv.textContent = "Testing 123";
-console.log(weatherDiv);
-
 const body = document.querySelector('body');
+const weatherDiv = document.createElement('div');
+const navElement = document.querySelector('[data-nav]');
+
 body.appendChild(weatherDiv);
 
-
-const navElement = document.querySelector('[data-nav]');
 atlWeather.forEach(function(obj) {
-    const newHeading = document.createElement('h1');
-    newHeading.textContent = obj.name;
-    newHeading.setAttribute('h1', obj.name);
-    navElement.append(newHeading);    
+    /** add name */
+    const nameElement = document.createElement('h1');
+    nameElement.textContent = obj.name;
+    navElement.append(nameElement);   
+
+    /** add temp */
+    const tempElement = document.createElement('h1');
+    tempElement.textContent = obj.main.temp;
+    navElement.append(tempElement);
+
+    /** add wind speed */
+    const windElement = document.createElement('h1');
+    windElement.textContent = obj.wind.speed;
+    navElement.append(windElement);
+
+    /** display image */
+    const url = getUrlFromWeatherObject(obj);
+    createImageElement(url);
+
+    createMapElement(obj.coord);
 });
 
-atlWeather.forEach(function(obj) {
-    const newHeading = document.createElement('h1');
-    newHeading.textContent = obj.main.temp;
-    newHeading.setAttribute('h1', obj.main.temp);
-    navElement.append(newHeading);
-});
-
-atlWeather.forEach(function(obj) {
-    const newHeading = document.createElement('h1');
-    newHeading.textContent = obj.wind.speed;
-    newHeading.setAttribute('h1', obj.wind.speed);
-    navElement.append(newHeading);
-});
-
-function getWeatherUrl(weather){
-
-    return iconURL;
+function getUrlFromWeatherObject(weatherObject) {
+    const [weatherItem] = weatherObject.weather;
+    const { icon } = weatherItem;
+    return `http://openweathermap.org/img/w/${icon}.png`
 }
 
-function showIcon(url){
+function createImageElement(url){
+    const newIcon = document.createElement('img');
+    newIcon.setAttribute('src', url);
+    body.append(newIcon);
+}
 
+function createMapElement(coordinates){
+    const { lon, lat } = coordinates;
+    const mapSource = `http://maps.google.com/maps?q=${lon}, ${lat}&z=15&output=embed`
+    const mapWidth = 360;
+    const mapHeight = 270;
+    const mapFrameborder = 0;
+    const mapStyle = "border:0"
+
+    const iFrameElement = document.createElement('iframe');
+    iFrameElement.setAttribute('src', mapSource);
+    iFrameElement.setAttribute('width', mapWidth);
+    iFrameElement.setAttribute('height', mapHeight);
+    iFrameElement.setAttribute('frameborder', mapFrameborder);
+    iFrameElement.setAttribute('border', mapStyle);
+
+    body.append(iFrameElement);
 }
 
 
+/** all of these will take an object as an argument (one element of the atlWeather array) 
+ * 
+*/
+/** write a function that returns a new h1 element with the */
 
 
